@@ -76,15 +76,15 @@ def evaluate(state,current):
     for line in lines:
         pieces_on_line = [p for p in line if p is not None]
         empty_count = 4 - len(pieces_on_line)
-
-        # Pour chaque caractéristiques
-        for i in range(4):
-            values = [p[i] for p in pieces_on_line]
-            if all(v == values[0] for v in values):
+        if len(pieces_on_line)>0:
+            common = frozenset(pieces_on_line[0])
+            for elem in pieces_on_line[1:]:
+                common = common & frozenset(elem)
+            if len(common)>0:
                 if empty_count == 1:
-                    score += 30  # Menace directe
+                    score += 30*len(common)  # Menace directe
                 elif empty_count == 2:
-                    score += 10  # Bon début
+                    score += 10*len(common)  # Bon début
 
     # Bonus pour positions stratégiques (au centre)
     center_indices = [5, 6, 9, 10]  # Milieu du plateau
