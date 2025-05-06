@@ -68,7 +68,7 @@ def evaluate(state,current):
     center_indices = [5, 6, 9, 10]  # Milieu du plateau
     for index in center_indices:
         if state['board'][index] is not None:
-            score += 20
+            score += 6
 
     return score if current==1 else -score
 

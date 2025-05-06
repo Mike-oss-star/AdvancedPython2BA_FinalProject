@@ -1,7 +1,6 @@
 import socket
 import json 
 import threading
-import random
 from game_logic import negamaxWithPruning
 
 
@@ -12,17 +11,16 @@ request_subscribe={
     "matricules":["23230","23390"]
 }
 
-def subscription():
+def registration():
     client_socket = socket . socket ()
     client_socket . connect (( 'localhost' , 3000) )
     client_socket . send ( json.dumps(request_subscribe) . encode () )
-
     data=client_socket.recv(512).decode()
     response=json.loads(data)
-    print("reponse du serveur: ",response.get("response"))
-
-subscription()
-
+    if response.get('response') == 'ok':
+        print('registration sucessfull')
+    if response.get('response')=='error':
+        print(response.get('error'))
 
 
 def listen_to_server_ping():
@@ -56,6 +54,7 @@ def listen_to_server_ping():
             print('An error occured')
             break
 
-
-listener_thread=threading.Thread(target=listen_to_server_ping,)
-listener_thread.start()
+if __name__=='__main__':
+    registration()
+    listener_thread=threading.Thread(target=listen_to_server_ping,)
+    listener_thread.start()
