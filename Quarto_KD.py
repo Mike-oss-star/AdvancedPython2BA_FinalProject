@@ -8,7 +8,7 @@ from game_logic import negamaxWithPruning
 request_subscribe={
     "request": "subscribe",
     "port": 8008,
-    "name":"KD_TO_CRAZY",
+    "name":"oss-star",
     "matricules":["23230","23390"]
 }
 
