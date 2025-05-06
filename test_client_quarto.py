@@ -3,10 +3,10 @@ import socket
 import json
 import threading
 import time
-from client_quarto import subscription,listen_to_server_ping
+from client_quarto import registration,listen_to_server_ping
 
 def start_listening():
-    t=threading.Thread(listen_to_server_ping,daemon=True)
+    t=threading.Thread(target=listen_to_server_ping,daemon=True)
     t.start()
     time.sleep(1)
 
