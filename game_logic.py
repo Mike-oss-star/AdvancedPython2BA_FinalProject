@@ -1,4 +1,5 @@
 import copy
+import time
 
 def same(L):
     if None in L:
@@ -98,7 +99,7 @@ def get_available_pieces(state):
                     all_pieces.add(f'{size + color + weight + shape}')
     return  list(all_pieces-used)
 
-def negamaxWithPruning(state, current,depth=2, alpha=float('-inf'), beta=float('inf')):
+def negamaxWithPruning(state, current,start_time,depth=2, alpha=float('-inf'), beta=float('inf')):
     if isWinning(state["board"]) or depth==0:
         return evaluate(state,current),None
     
@@ -111,10 +112,15 @@ def negamaxWithPruning(state, current,depth=2, alpha=float('-inf'), beta=float('
         for piece in pieces:
             move = {"pos": pos, "piece": piece}
             next_state = next_State(state, move)
-            value, _ = negamaxWithPruning(next_state,(current+1)%2,depth-1, -beta, -alpha)
+            value, _ = negamaxWithPruning(next_state,(current+1)%2,start_time,depth-1, -beta, -alpha)
             if value>theValue:
                 theValue, theMove = value, move
             alpha = max(alpha, theValue)
             if alpha >= beta:
                 break
+            if time.time()-start_time>3:
+                if theMove is None:
+                    theMove=move 
+                    break
+                return theValue,theMove
     return theValue,theMove

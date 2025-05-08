@@ -1,6 +1,7 @@
 import socket
 import json 
 import threading
+import time
 from game_logic import negamaxWithPruning
 
 
@@ -13,7 +14,7 @@ request_subscribe={
 
 def registration():
     client_socket = socket . socket ()
-    client_socket . connect (( 'localhost' , 3000) )
+    client_socket . connect (( '172.17.10.133' , 3000) )
     client_socket . send ( json.dumps(request_subscribe) . encode () )
     data=client_socket.recv(512).decode()
     response=json.loads(data)
@@ -27,7 +28,7 @@ def listen_to_server_ping():
     while True:
         try:
             s=socket.socket()
-            s.bind(('localhost',8008))
+            s.bind(('',8008))
             s.listen()
             client,_=s.accept()
             data=client.recv(512).decode()
@@ -40,9 +41,9 @@ def listen_to_server_ping():
                 if message.get('request')=='play':
                     state=message.get('state')
                     if state['current']==0:
-                        _,best_move=negamaxWithPruning(state,state['current'])
+                        _,best_move=negamaxWithPruning(state,state['current'],time.time())
                     if state['current']==1:
-                        _,best_move=negamaxWithPruning(state,state['current']-1)
+                        _,best_move=negamaxWithPruning(state,state['current']-1,time.time())
                     move={
                         'response':'move',
                         'move':best_move
@@ -50,9 +51,10 @@ def listen_to_server_ping():
                     response_move=json.dumps(move).encode()
                     client.send(response_move)
                     print(message.get('state'))
+                    print(best_move)
         except:
             print('An error occured')
-            break
+            
 
 if __name__=='__main__':
     registration()
