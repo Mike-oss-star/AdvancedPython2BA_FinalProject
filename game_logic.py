@@ -87,17 +87,20 @@ def get_available_positions(state):
     return [i for i, v in enumerate(state["board"]) if v is None]
 
 def get_available_pieces(state):
-    used = set(p for p in state["board"] if p is not None)
+    used = set(frozenset(p) for p in state["board"] if p is not None)
     if state["piece"]:
-        used.add(state["piece"])
-
+        used.add(frozenset(state["piece"]))
     all_pieces = set()
     for size in ["B", "S"]:
         for color in ["D", "L"]:
             for weight in ["E", "F"]:
                 for shape in ["C", "P"]:
-                    all_pieces.add(f'{size + color + weight + shape}')
-    return  list(all_pieces-used)
+                    all_pieces.add(frozenset(size + color + weight + shape))
+    list_res=[]
+    for elem in list(all_pieces-used):
+        mot=''.join(elem)
+        list_res.append(mot)
+    return  list_res
 
 def negamaxWithPruning(state, current,start_time,depth=2, alpha=float('-inf'), beta=float('inf')):
     if isWinning(state["board"]) or depth==0:

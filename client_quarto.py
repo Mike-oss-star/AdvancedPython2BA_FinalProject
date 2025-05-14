@@ -14,7 +14,7 @@ request_subscribe={
 
 def registration():
     client_socket = socket . socket ()
-    client_socket . connect (( '172.17.10.133' , 3000) )
+    client_socket . connect (( 'localhost' , 3000) )
     client_socket . send ( json.dumps(request_subscribe) . encode () )
     data=client_socket.recv(512).decode()
     response=json.loads(data)
@@ -54,7 +54,7 @@ def listen_to_server_ping():
                     print(best_move)
         except:
             print('An error occured')
-            
+                      
 
 if __name__=='__main__':
     registration()
