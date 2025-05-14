@@ -52,7 +52,9 @@ def listen_to_server_ping():
                     client.send(response_move)
                     print(message.get('state'))
                     print(best_move)
-        except:
+        except socket.timeout:
+            pass
+        except OSError:
             print('An error occured')
                       
 
